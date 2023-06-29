@@ -16,7 +16,7 @@ export const FormAnnotation = styled("div", {
   marginTop: "$2",
 
   "#error": {
-    color: "#FF3333",
+    color: "#F75A68",
   },
 
   "#default": {
