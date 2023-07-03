@@ -1,10 +1,13 @@
 import { Heading, MultiStep, Button, Text } from "@ignite-ui/react";
-import { ArrowRight } from "phosphor-react";
+import { signIn, useSession } from "next-auth/react";
+import { ArrowRight, CheckCircle } from "phosphor-react";
 
 import { Container, Header } from "../styles";
 import { ConnectBox, ConnectItem } from "./styles";
 
 const ConnectCalendar = () => {
+  const { data: session } = useSession();
+
   return (
     <Container>
       <Header>
@@ -18,9 +21,19 @@ const ConnectCalendar = () => {
       <ConnectBox>
         <ConnectItem>
           <Text>Google Calendar</Text>
-          <Button variant="secondary" size="sm">
-            Conectar <ArrowRight />
-          </Button>
+          {session ? (
+            <Button variant="secondary" size="sm" disabled={!!session}>
+              Connected <CheckCircle />
+            </Button>
+          ) : (
+            <Button
+              onClick={() => signIn("google")}
+              variant="secondary"
+              size="sm"
+            >
+              Conectar <ArrowRight />
+            </Button>
+          )}
         </ConnectItem>
         <Button type="submit">
           Próximo passo <ArrowRight />
