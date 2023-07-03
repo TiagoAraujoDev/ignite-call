@@ -26,7 +26,7 @@ const registerFormSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-export default function Register() {
+const Register = () => {
   const router = useRouter();
   const {
     register,
@@ -92,4 +92,6 @@ export default function Register() {
       </Form>
     </Container>
   );
-}
+};
+
+export default Register;

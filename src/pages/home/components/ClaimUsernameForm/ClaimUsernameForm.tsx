@@ -19,7 +19,7 @@ const claimUsernameFormSchema = z.object({
 
 type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>;
 
-export function ClaimUsernameForm() {
+const ClaimUsernameForm = () => {
   const router = useRouter();
   const {
     register,
@@ -62,4 +62,6 @@ export function ClaimUsernameForm() {
       </FormAnnotation>
     </>
   );
-}
+};
+
+export { ClaimUsernameForm };
