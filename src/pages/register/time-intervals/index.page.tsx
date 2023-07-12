@@ -132,7 +132,9 @@ const TimeIntervals = () => {
             );
           })}
         </IntervalContainer>
-        {errors.intervals && <FormError>{errors.intervals.message}</FormError>}
+        {errors.intervals && (
+          <FormError size="sm">{errors.intervals.message}</FormError>
+        )}
         <Button type="submit" disabled={isSubmitting}>
           Próximo passo
           <ArrowRight />
