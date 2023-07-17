@@ -11,6 +11,7 @@ import { ArrowRight } from "phosphor-react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { convertTimeStringToMinutes } from "@/utils/convertTimeStringToMinutes";
 import { getWeekDays } from "@/utils/getWeekDays";
 
 import { Container, Header } from "../styles";
@@ -39,10 +40,26 @@ const timeIntervalsFormSchema = z.object({
     )
     .refine((intervals) => intervals.length > 0, {
       message: "Você precisa selecionar pelo menos um dia da semana!",
+    })
+    .transform((intervals) => {
+      return intervals.map((interval) => {
+        return {
+          weekDay: interval.weekDay,
+          startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
+          endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
+        };
+      });
+    })
+    .refine((intervals) => {
+      return intervals.every(
+        (interval) =>
+          interval.endTimeInMinutes - interval.startTimeInMinutes >= 60
+      );
     }),
 });
 
-type TimeIntervalsFormData = z.infer<typeof timeIntervalsFormSchema>;
+type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>;
+type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>;
 
 const TimeIntervals = () => {
   const {
@@ -51,7 +68,7 @@ const TimeIntervals = () => {
     control,
     watch,
     formState: { isSubmitting, errors },
-  } = useForm({
+  } = useForm<TimeIntervalsFormInput>({
     resolver: zodResolver(timeIntervalsFormSchema),
     defaultValues: {
       intervals: [
@@ -74,9 +91,10 @@ const TimeIntervals = () => {
   const weekDays = getWeekDays();
   const intervals = watch("intervals");
 
-  const handleSetTimeIntervals = async (data: TimeIntervalsFormData) => {
+  const handleSetTimeIntervals = async (data: unknown) => {
     //  TODO:
-    console.log(data);
+    const formData = data as TimeIntervalsFormOutput;
+    console.log(formData);
   };
 
   return (
@@ -125,7 +143,7 @@ const TimeIntervals = () => {
                     type="time"
                     step={60}
                     disabled={intervals[index].enabled === false}
-                    {...register(`intervals.${index}.startTime`)}
+                    {...register(`intervals.${index}.endTime`)}
                   />
                 </IntervalInputs>
               </IntervalItem>
