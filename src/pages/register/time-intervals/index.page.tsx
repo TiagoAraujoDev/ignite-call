@@ -93,7 +93,6 @@ const TimeIntervals = () => {
   const intervals = watch("intervals");
 
   const handleSetTimeIntervals = async (data: unknown) => {
-    //  TODO:
     const { intervals } = data as TimeIntervalsFormOutput;
 
     await api.post("/users/time-intervals", { intervals });
